@@ -1,0 +1,21 @@
+{
+  "name": "@rpral/ui-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "dependencies": {
+    "@rpral/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "@types/react-native": "^0.73",
+    "typescript": "^5.4.0"
+  }
+}

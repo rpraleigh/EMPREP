@@ -1,0 +1,28 @@
+{
+  "name": "@rpral/api",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
+    "./alert": { "import": "./dist/alertService.js", "types": "./dist/alertService.d.ts" },
+    "./subscription": { "import": "./dist/subscriptionService.js", "types": "./dist/subscriptionService.d.ts" },
+    "./delivery": { "import": "./dist/deliveryService.js", "types": "./dist/deliveryService.d.ts" },
+    "./template": { "import": "./dist/templateService.js", "types": "./dist/templateService.d.ts" }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rpral/types": "workspace:*",
+    "@supabase/supabase-js": "^2.43.0",
+    "twilio": "^5.0.0",
+    "expo-server-sdk": "^3.10.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

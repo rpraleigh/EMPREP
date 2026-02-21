@@ -1,2 +1,24 @@
+# env
 .env
+.env.local
 *.env
+
+# dependencies
+node_modules/
+
+# build outputs
+dist/
+.next/
+out/
+
+# turbo
+.turbo/
+
+# expo
+.expo/
+ios/
+android/
+
+# misc
+*.tsbuildinfo
+.DS_Store

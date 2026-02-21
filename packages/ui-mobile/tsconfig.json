@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-native",
+    "lib": ["ES2022"],
+    "paths": {
+      "@rpral/types": ["../types/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

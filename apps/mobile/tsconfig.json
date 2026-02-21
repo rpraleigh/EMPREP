@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-native",
+    "lib": ["ES2022"],
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@rpral/types": ["../../packages/types/src/index.ts"],
+      "@rpral/api": ["../../packages/api/src/index.ts"],
+      "@rpral/ui-mobile": ["../../packages/ui-mobile/src/index.ts"]
+    }
+  },
+  "include": ["src", "app"],
+  "exclude": ["node_modules"]
+}

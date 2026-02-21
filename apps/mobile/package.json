@@ -1,0 +1,31 @@
+{
+  "name": "@rpral/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rpral/api": "workspace:*",
+    "@rpral/types": "workspace:*",
+    "@rpral/ui-mobile": "workspace:*",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "@supabase/supabase-js": "^2.43.0",
+    "expo": "~51.0.0",
+    "expo-router": "~3.5.0",
+    "expo-notifications": "~0.28.0",
+    "expo-device": "~6.0.0",
+    "expo-constants": "~16.0.0",
+    "react": "18.2.0",
+    "react-native": "0.74.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7",
+    "@types/react": "~18.2.0",
+    "typescript": "^5.4.0"
+  }
+}
