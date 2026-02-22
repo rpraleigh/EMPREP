@@ -1,4 +1,4 @@
-import { createClient } from '../../../lib/supabase-server';
+import { createClient } from '@/lib/supabase-server';
 import { listAppointments } from '@rpral/api';
 import type { AppointmentStatus } from '@rpral/types';
 import Link from 'next/link';

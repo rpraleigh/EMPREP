@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '../../../lib/supabase-server';
+import { createClient } from '@/lib/supabase-server';
 import { listCustomers } from '@rpral/api';
 import Link from 'next/link';
 
