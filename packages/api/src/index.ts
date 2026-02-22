@@ -1,6 +1,7 @@
 export { createServerSupabaseClient, createBrowserSupabaseClient } from './supabaseClient';
 export { createStripeClient } from './stripeClient';
 export * from './customerService';
+export * from './employeeService';
 export * from './catalogService';
 export * from './orderService';
 export * from './appointmentService';
