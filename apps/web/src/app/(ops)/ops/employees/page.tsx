@@ -28,12 +28,20 @@ export default async function EmployeesPage({
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-white">Employees</h1>
-        <Link
-          href={includeInactive ? '/ops/employees' : '/ops/employees?inactive=1'}
-          className="text-sm text-gray-400 hover:text-gray-200 border border-gray-600 rounded-lg px-3 py-1.5 transition-colors"
-        >
-          {includeInactive ? 'Hide inactive' : 'Show inactive'}
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href={includeInactive ? '/ops/employees' : '/ops/employees?inactive=1'}
+            className="text-sm text-gray-400 hover:text-gray-200 border border-gray-600 rounded-lg px-3 py-1.5 transition-colors"
+          >
+            {includeInactive ? 'Hide inactive' : 'Show inactive'}
+          </Link>
+          <Link
+            href="/ops/employees/new"
+            className="bg-blue-600 text-white rounded-lg px-4 py-1.5 text-sm font-semibold hover:bg-blue-700 transition-colors"
+          >
+            + New Employee
+          </Link>
+        </div>
       </div>
 
       {employees.length === 0 ? (
