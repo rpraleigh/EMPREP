@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "EMPREP",
+    "slug": "emprep",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "emprep",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.rpral.emprep"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.rpral.emprep"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#DC2626",
+          "sounds": []
+        }
+      ],
+      "expo-router"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-eas-project-id"
+      }
+    }
+  }
+}

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'EMPREP Ops Dashboard',
-  description: 'Emergency Preparedness Operations Dashboard',
+  title: 'EMPREP',
+  description: 'Emergency Preparedness Supply Service',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

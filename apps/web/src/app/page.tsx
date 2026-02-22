@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 
+// Root redirect — send authenticated users to their portal
 export default function Home() {
-  redirect('/dashboard');
+  redirect('/portal/dashboard');
 }
