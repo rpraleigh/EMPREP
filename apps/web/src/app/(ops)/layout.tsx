@@ -23,6 +23,7 @@ export default async function OpsLayout({ children }: { children: React.ReactNod
             <Link href="/ops/appointments"  className="hover:text-white">Appointments</Link>
             {isAdmin && (
               <>
+                <Link href="/ops/orders"     className="hover:text-white">Orders</Link>
                 <Link href="/ops/customers"  className="hover:text-white">Customers</Link>
                 <Link href="/ops/catalog"    className="hover:text-white">Catalog</Link>
                 <Link href="/ops/employees"  className="hover:text-white">Employees</Link>

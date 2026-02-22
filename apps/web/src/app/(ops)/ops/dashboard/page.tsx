@@ -99,7 +99,7 @@ export default async function OpsDashboard() {
         <StatCard label="Pending Requests"  value={requested.length}  href="/ops/appointments?status=requested" accent="amber" />
         <StatCard label="Confirmed"         value={confirmed.length}  href="/ops/appointments?status=confirmed" accent="blue" />
         {isAdmin && <StatCard label="Customers"      value={customers.length}  href="/ops/customers" />}
-        {isAdmin && <StatCard label="Pending Orders" value={pendingOrders.length} href="#" accent={pendingOrders.length > 0 ? 'amber' : 'gray'} />}
+        {isAdmin && <StatCard label="Pending Orders" value={pendingOrders.length} href="/ops/orders?status=confirmed" accent={pendingOrders.length > 0 ? 'amber' : 'gray'} />}
       </div>
 
       {/* Pending requests — admin action required */}
