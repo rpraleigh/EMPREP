@@ -5,5 +5,10 @@
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
   }
 }
