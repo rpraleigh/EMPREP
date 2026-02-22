@@ -64,9 +64,12 @@ export default async function OpsAppointmentDetail({
   const customer         = await getCustomerById(supabase, appt.customerId);
   const assignedEmployee = employees.find((e) => e.id === appt.employeeId) ?? null;
 
-  async function confirmAppointment(formData: FormData) {
+  const canAssign  = isAdmin && (appt.status === 'requested' || appt.status === 'confirmed');
+  const canCancel  = isAdmin && appt.status !== 'completed' && appt.status !== 'cancelled';
+
+  async function assignOrReassign(formData: FormData) {
     'use server';
-    const s = await createClient();
+    const s           = await createClient();
     const scheduledAt = formData.get('scheduledAt') as string | null;
     const adminNotes  = formData.get('adminNotes')  as string | null;
     await assignAppointment(s, {
@@ -82,6 +85,13 @@ export default async function OpsAppointmentDetail({
     'use server';
     const s = await createClient();
     await updateAppointmentStatus(s, appointmentId, 'in_progress');
+    redirect(`/ops/appointments/${appointmentId}`);
+  }
+
+  async function cancelAppointment() {
+    'use server';
+    const s = await createClient();
+    await updateAppointmentStatus(s, appointmentId, 'cancelled');
     redirect(`/ops/appointments/${appointmentId}`);
   }
 
@@ -112,25 +122,26 @@ export default async function OpsAppointmentDetail({
 
       {/* Details */}
       <div className="bg-gray-800 border border-gray-700 rounded-xl divide-y divide-gray-700/50">
-        <Row label="Scheduled"     value={appt.scheduledAt ? fmtDateTime(appt.scheduledAt) : 'TBD'} />
-        <Row label="Assigned To"   value={assignedEmployee ? assignedEmployee.fullName : (appt.employeeId ? '(employee)' : 'Unassigned')} />
+        <Row label="Scheduled"      value={appt.scheduledAt ? fmtDateTime(appt.scheduledAt) : 'TBD'} />
+        <Row label="Assigned To"    value={assignedEmployee ? assignedEmployee.fullName : (appt.employeeId ? '(employee)' : 'Unassigned')} />
         <Row label="Customer Notes" value={appt.customerNotes ?? '—'} />
         {isAdmin && <Row label="Admin Notes" value={appt.adminNotes ?? '—'} />}
-        <Row label="Created"       value={fmtDateTime(appt.createdAt)} />
+        <Row label="Created"        value={fmtDateTime(appt.createdAt)} />
       </div>
 
-      {/* Assign form — admin only */}
-      {isAdmin && appt.status === 'requested' && (
+      {/* Assign / Reassign form — admin only, requested or confirmed */}
+      {canAssign && (
         <section className="bg-gray-800 border border-gray-700 rounded-xl p-5">
           <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4">
-            Assign &amp; Schedule
+            {appt.status === 'requested' ? 'Assign & Schedule' : 'Reassign'}
           </h2>
-          <form action={confirmAppointment} className="space-y-4">
+          <form action={assignOrReassign} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Employee</label>
               <select
                 name="employeeId"
                 required
+                defaultValue={appt.employeeId ?? ''}
                 className="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white"
               >
                 <option value="">— select employee —</option>
@@ -144,6 +155,9 @@ export default async function OpsAppointmentDetail({
               <input
                 type="datetime-local"
                 name="scheduledAt"
+                defaultValue={appt.scheduledAt
+                  ? new Date(appt.scheduledAt).toISOString().slice(0, 16)
+                  : ''}
                 className="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white"
               />
             </div>
@@ -152,6 +166,7 @@ export default async function OpsAppointmentDetail({
               <textarea
                 name="adminNotes"
                 rows={2}
+                defaultValue={appt.adminNotes ?? ''}
                 className="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white resize-none"
               />
             </div>
@@ -159,32 +174,46 @@ export default async function OpsAppointmentDetail({
               type="submit"
               className="bg-blue-600 text-white rounded-lg px-5 py-2 text-sm font-semibold hover:bg-blue-700 transition-colors"
             >
-              Confirm Assignment
+              {appt.status === 'requested' ? 'Confirm Assignment' : 'Update Assignment'}
             </button>
           </form>
         </section>
       )}
 
-      {/* Start visit */}
-      {appt.status === 'confirmed' && !visitRecord && (
-        <form action={markInProgress}>
-          <button
-            type="submit"
-            className="bg-purple-600 text-white rounded-lg px-5 py-2 text-sm font-semibold hover:bg-purple-700 transition-colors"
-          >
-            Start Visit
-          </button>
-        </form>
-      )}
+      {/* Action buttons row */}
+      {(appt.status === 'confirmed' || appt.status === 'in_progress' || canCancel) && (
+        <div className="flex gap-3">
+          {appt.status === 'confirmed' && !visitRecord && (
+            <form action={markInProgress}>
+              <button
+                type="submit"
+                className="bg-purple-600 text-white rounded-lg px-5 py-2 text-sm font-semibold hover:bg-purple-700 transition-colors"
+              >
+                Start Visit
+              </button>
+            </form>
+          )}
 
-      {/* Complete visit link */}
-      {appt.status === 'in_progress' && !visitRecord && (
-        <Link
-          href={`/ops/appointments/${appointmentId}/visit`}
-          className="inline-block bg-green-600 text-white rounded-lg px-5 py-2 text-sm font-semibold hover:bg-green-700 transition-colors"
-        >
-          Complete Visit →
-        </Link>
+          {appt.status === 'in_progress' && !visitRecord && (
+            <Link
+              href={`/ops/appointments/${appointmentId}/visit`}
+              className="inline-block bg-green-600 text-white rounded-lg px-5 py-2 text-sm font-semibold hover:bg-green-700 transition-colors"
+            >
+              Complete Visit →
+            </Link>
+          )}
+
+          {canCancel && (
+            <form action={cancelAppointment}>
+              <button
+                type="submit"
+                className="bg-gray-700 text-gray-300 rounded-lg px-5 py-2 text-sm font-semibold hover:bg-gray-600 transition-colors"
+              >
+                Cancel Appointment
+              </button>
+            </form>
+          )}
+        </div>
       )}
 
       {/* Visit summary */}
@@ -193,15 +222,11 @@ export default async function OpsAppointmentDetail({
           <div className="px-5 py-3">
             <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest">Visit Summary</p>
           </div>
-          <Row label="Summary"          value={visitRecord.summary        ?? '—'} />
-          <Row label="Recommendations"  value={visitRecord.recommendations ?? '—'} />
+          <Row label="Summary"         value={visitRecord.summary        ?? '—'} />
+          <Row label="Recommendations" value={visitRecord.recommendations ?? '—'} />
           <Row
             label="Follow-up"
-            value={
-              visitRecord.followUpNeeded
-                ? `Yes — ${visitRecord.followUpInterval ?? ''}`
-                : 'No'
-            }
+            value={visitRecord.followUpNeeded ? `Yes — ${visitRecord.followUpInterval ?? ''}` : 'No'}
           />
           <Row label="Completed" value={fmtDateTime(visitRecord.completedAt)} />
         </section>
