@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default async function OpsLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/login');
+  if (!user) redirect('/ops/login');
 
   // Role check via JWT claim
   const role = (user.app_metadata as Record<string, unknown>)?.['user_role'] as string | undefined;

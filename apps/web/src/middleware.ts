@@ -32,11 +32,13 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute =
     request.nextUrl.pathname.startsWith('/login') ||
     request.nextUrl.pathname.startsWith('/signup') ||
+    request.nextUrl.pathname.startsWith('/ops/login') ||
     request.nextUrl.pathname.startsWith('/callback');
 
   if (!user && !isAuthRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    // Ops routes redirect to ops login; everything else to customer login
+    url.pathname = request.nextUrl.pathname.startsWith('/ops') ? '/ops/login' : '/login';
     return NextResponse.redirect(url);
   }
 
