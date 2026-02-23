@@ -62,25 +62,35 @@ export default function CustomerDashboard() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const [profResp, suppliesResp, apptResp] = await Promise.all([
-      supabase.from('customer_profiles').select('full_name').eq('user_id', user.id).maybeSingle(),
+    const { data: profile } = await supabase
+      .from('customer_profiles')
+      .select('id, full_name')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (!profile) { setLoading(false); return; }
+
+    setProfileName((profile as { id: string; full_name: string }).full_name ?? null);
+
+    const profileId = (profile as { id: string; full_name: string }).id;
+
+    const [suppliesResp, apptResp] = await Promise.all([
       supabase
         .from('customer_supplies')
         .select('id, quantity, expires_at, supply_items(name, sku)')
-        .eq('customer_id', user.id)
+        .eq('customer_id', profileId)
         .order('expires_at', { ascending: true, nullsFirst: false })
         .limit(5),
       supabase
         .from('appointments')
         .select('id, type, status, scheduled_at, customer_notes')
-        .eq('customer_id', user.id)
+        .eq('customer_id', profileId)
         .not('status', 'eq', 'completed')
         .not('status', 'eq', 'cancelled')
         .order('scheduled_at', { ascending: true, nullsFirst: false })
         .limit(3),
     ]);
 
-    setProfileName((profResp.data as { full_name: string } | null)?.full_name ?? null);
     setSupplies((suppliesResp.data ?? []) as SupplyRow[]);
     setAppointments((apptResp.data ?? []) as AppointmentRow[]);
     setLoading(false);

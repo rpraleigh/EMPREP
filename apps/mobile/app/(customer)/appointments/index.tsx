@@ -34,10 +34,19 @@ export default function CustomerAppointments() {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('customer_profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!profile) { setLoading(false); return; }
+
       const { data } = await supabase
         .from('appointments')
         .select('id, type, status, scheduled_at, customer_notes')
-        .eq('customer_id', user.id)
+        .eq('customer_id', (profile as { id: string }).id)
         .order('scheduled_at', { ascending: false, nullsFirst: true });
       setAppts((data ?? []) as Appt[]);
       setLoading(false);
