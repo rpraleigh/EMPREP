@@ -101,7 +101,7 @@ export default async function CatalogItemPage({
         <section className="mb-8">
           <h2 className="text-sm font-semibold text-gray-700 mb-3">What&apos;s Included</h2>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-50">
-            {item.contents.map((c) => (
+            {(item.contents as Array<{ id: string; item: { name: string }; quantity: number }>).map((c) => (
               <div key={c.id} className="flex items-center justify-between px-4 py-3 text-sm">
                 <span className="text-gray-800">{c.item.name}</span>
                 <span className="text-gray-500 font-medium">×{c.quantity}</span>

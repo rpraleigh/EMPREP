@@ -223,7 +223,7 @@ export default async function CustomerDashboard() {
         <StatCard
           label="Next Appointment"
           value={apptValue}
-          sub={apptSub}
+          {...(apptSub !== undefined && { sub: apptSub })}
           accent={nextAppt ? 'blue' : 'gray'}
         />
         <StatCard
