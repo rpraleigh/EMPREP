@@ -1,4 +1,4 @@
-import { createClient } from '../../../lib/supabase-server';
+import { createClient } from '@/lib/supabase-server';
 import {
   getCustomerProfile,
   getCustomerSupplies,
@@ -179,6 +179,38 @@ export default async function CustomerDashboard() {
           {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
         </p>
       </div>
+
+      {/* GUIDE ME banner */}
+      {supplies.length === 0 && appointments.length === 0 ? (
+        <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl p-6 text-white shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-widest text-red-200 mb-1">Get started</p>
+          <h2 className="text-lg font-bold mb-1">Get your personalized kit recommendation</h2>
+          <p className="text-sm text-red-100 mb-5">
+            Tell us your location and we'll build a supply plan tailored to your household and local hazards.
+          </p>
+          <Link
+            href="/portal/guide"
+            className="inline-block bg-white text-red-700 font-semibold text-sm rounded-lg px-5 py-2.5 hover:bg-red-50 transition-colors"
+          >
+            Guide Me →
+          </Link>
+        </div>
+      ) : (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-center justify-between gap-4">
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900">Update your recommendations</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Hazard conditions change. Get a fresh recommendation based on your current profile.
+            </p>
+          </div>
+          <Link
+            href="/portal/guide"
+            className="shrink-0 text-sm font-semibold text-red-600 hover:text-red-700 hover:underline"
+          >
+            Guide Me →
+          </Link>
+        </div>
+      )}
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
