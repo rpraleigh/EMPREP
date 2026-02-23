@@ -63,7 +63,7 @@ export default async function CatalogItemPage({
   }
 
   const price   = `$${(item.priceCents / 100).toFixed(2)}`;
-  const hasKit  = item.isKit && 'contents' in item && item.contents.length > 0;
+  const hasKit  = item.isKit && 'contents' in item && Array.isArray(item.contents) && (item.contents as unknown[]).length > 0;
 
   return (
     <div className="max-w-2xl">
