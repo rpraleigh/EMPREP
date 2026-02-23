@@ -1,11 +1,20 @@
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import { createClient } from '../../lib/supabase-server';
+import { getCustomerProfile } from '@rpral/api';
 import Link from 'next/link';
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
+
+  const hdrs = await headers();
+  const pathname = hdrs.get('x-pathname') ?? '';
+  if (!pathname.startsWith('/portal/onboarding')) {
+    const profile = await getCustomerProfile(supabase, user.id);
+    if (!profile) redirect('/portal/onboarding');
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

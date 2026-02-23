@@ -81,11 +81,24 @@ export default async function AccountPage() {
     const zip          = (formData.get('zip')          as string) || null;
     const specialNeeds = (formData.get('specialNeeds') as string) || null;
 
+    const hasPetsVal  = formData.get('hasPets') === 'true';
+    const petCountRaw = formData.get('petCount');
+
     const base = {
       fullName:      formData.get('fullName') as string,
       email:         formData.get('email')    as string,
       householdSize: Number(formData.get('householdSize') ?? 1),
-      hasPets:       formData.get('hasPets') === 'true',
+      hasPets:       hasPetsVal,
+      wantsGoKit:              formData.get('wantsGoKit')             === 'on',
+      wantsShelterKit:         formData.get('wantsShelterKit')        === 'on',
+      hasInfants:              formData.get('hasInfants')             === 'yes',
+      hasElderly:              formData.get('hasElderly')             === 'yes',
+      petCount:                hasPetsVal && petCountRaw ? Number(petCountRaw) : null,
+      hasServiceAnimal:        formData.get('hasServiceAnimal')       === 'yes',
+      powerDependentMedical:   formData.get('powerDependentMedical')  === 'yes',
+      refrigeratedMedications: formData.get('refrigeratedMedications') === 'yes',
+      hasMobilityLimitations:  formData.get('hasMobilityLimitations') === 'yes',
+      hasVehicle:              formData.get('hasVehicle')             === 'yes',
       ...(phone        ? { phone }        : {}),
       ...(addressLine1 ? { addressLine1 } : {}),
       ...(addressLine2 ? { addressLine2 } : {}),
@@ -174,6 +187,130 @@ export default async function AccountPage() {
             <textarea name="specialNeeds" rows={2} defaultValue={profile?.specialNeeds ?? ''}
               placeholder="Mobility needs, allergies, medical equipment, etc."
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none" />
+          </div>
+
+          {/* ── Emergency Preparedness Profile ── */}
+          <div className="border-t border-gray-100 pt-5 space-y-5">
+            <h3 className="text-sm font-semibold text-gray-700">Emergency Preparedness Profile</h3>
+
+            {/* Scenario */}
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-2">Preparing for…</p>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" name="wantsGoKit"
+                    defaultChecked={profile?.wantsGoKit ?? false}
+                    className="accent-red-600" />
+                  <span className="text-sm text-gray-700">Evacuating quickly (go-kit / grab bag)</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" name="wantsShelterKit"
+                    defaultChecked={profile?.wantsShelterKit ?? true}
+                    className="accent-red-600" />
+                  <span className="text-sm text-gray-700">Sheltering at home (extended stay)</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Household */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">Children under 5?</p>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="radio" name="hasInfants" value="yes"
+                      defaultChecked={profile?.hasInfants ?? false}
+                      className="accent-red-600" /> Yes
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="radio" name="hasInfants" value="no"
+                      defaultChecked={!(profile?.hasInfants ?? false)}
+                      className="accent-red-600" /> No
+                  </label>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">Elderly members (65+)?</p>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="radio" name="hasElderly" value="yes"
+                      defaultChecked={profile?.hasElderly ?? false}
+                      className="accent-red-600" /> Yes
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="radio" name="hasElderly" value="no"
+                      defaultChecked={!(profile?.hasElderly ?? false)}
+                      className="accent-red-600" /> No
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Pets */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">Pet count</p>
+                <input type="number" name="petCount" min={0} max={99}
+                  defaultValue={profile?.petCount ?? ''}
+                  placeholder="0"
+                  className="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">Service animal?</p>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="radio" name="hasServiceAnimal" value="yes"
+                      defaultChecked={profile?.hasServiceAnimal ?? false}
+                      className="accent-red-600" /> Yes
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="radio" name="hasServiceAnimal" value="no"
+                      defaultChecked={!(profile?.hasServiceAnimal ?? false)}
+                      className="accent-red-600" /> No
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Medical */}
+            <div className="grid grid-cols-1 gap-3">
+              {([
+                { name: 'powerDependentMedical',   label: 'Power-dependent medical equipment?',        val: profile?.powerDependentMedical   ?? false },
+                { name: 'refrigeratedMedications', label: 'Refrigerated medications?',                 val: profile?.refrigeratedMedications ?? false },
+                { name: 'hasMobilityLimitations',  label: 'Significant mobility limitations?',         val: profile?.hasMobilityLimitations  ?? false },
+              ] as const).map((item) => (
+                <div key={item.name} className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-gray-700">{item.label}</p>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                      <input type="radio" name={item.name} value="yes"
+                        defaultChecked={item.val} className="accent-red-600" /> Yes
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                      <input type="radio" name={item.name} value="no"
+                        defaultChecked={!item.val} className="accent-red-600" /> No
+                    </label>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Transport */}
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-700">Vehicle available for evacuation?</p>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                  <input type="radio" name="hasVehicle" value="yes"
+                    defaultChecked={profile?.hasVehicle ?? true}
+                    className="accent-red-600" /> Yes
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                  <input type="radio" name="hasVehicle" value="no"
+                    defaultChecked={!(profile?.hasVehicle ?? true)}
+                    className="accent-red-600" /> No
+                </label>
+              </div>
+            </div>
           </div>
 
           <div className="pt-1">

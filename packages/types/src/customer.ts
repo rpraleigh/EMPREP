@@ -13,6 +13,17 @@ export interface CustomerProfile {
   hasPets:          boolean;
   specialNeeds:     string | null;
   stripeCustomerId: string | null;
+  // Emergency preparedness intake
+  wantsGoKit:              boolean;
+  wantsShelterKit:         boolean;
+  hasInfants:              boolean;
+  hasElderly:              boolean;
+  petCount:                number | null;
+  hasServiceAnimal:        boolean;
+  powerDependentMedical:   boolean;
+  refrigeratedMedications: boolean;
+  hasMobilityLimitations:  boolean;
+  hasVehicle:              boolean;
   createdAt:        string;
   updatedAt:        string;
 }
@@ -30,6 +41,17 @@ export interface CreateCustomerInput {
   householdSize?: number;
   hasPets?:      boolean;
   specialNeeds?: string;
+  // Emergency preparedness intake
+  wantsGoKit?:              boolean;
+  wantsShelterKit?:         boolean;
+  hasInfants?:              boolean;
+  hasElderly?:              boolean;
+  petCount?:                number | null;
+  hasServiceAnimal?:        boolean;
+  powerDependentMedical?:   boolean;
+  refrigeratedMedications?: boolean;
+  hasMobilityLimitations?:  boolean;
+  hasVehicle?:              boolean;
 }
 
 export interface UpdateCustomerInput extends Partial<Omit<CreateCustomerInput, 'userId'>> {}
