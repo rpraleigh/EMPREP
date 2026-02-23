@@ -17,13 +17,6 @@
       "package": "com.rpral.emprep"
     },
     "plugins": [
-      [
-        "expo-notifications",
-        {
-          "color": "#DC2626",
-          "sounds": []
-        }
-      ],
       "expo-router"
     ],
     "extra": {
