@@ -25,3 +25,7 @@ android/
 # misc
 *.tsbuildinfo
 .DS_Store
+
+# project documents
+EMPREP-Executive-Summary.md
+related/
