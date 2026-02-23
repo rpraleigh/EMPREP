@@ -6,6 +6,7 @@
 -- ── Categories ───────────────────────────────────────────────
 
 INSERT INTO supply_categories (name, slug, description, sort_order) VALUES
+  ('Kits',                   'kits',     'Pre-assembled emergency preparedness kits for households of all sizes.', 0),
   ('Water & Hydration',      'water',    'Water storage, purification, and filtration supplies.',          1),
   ('Food & Nutrition',       'food',     'Emergency food rations, freeze-dried meals, and calorie bars.',  2),
   ('Medical & First Aid',    'medical',  'First aid kits, medications, and protective equipment.',         3),
